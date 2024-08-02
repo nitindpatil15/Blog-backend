@@ -3,7 +3,7 @@ import { Like } from "../models/Like.model.js";
 import Blog from "../models/Blog.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import Comment from "../models/comment.model.js";
+import {Comment} from "../models/Comment.model.js";
 
 const toggleBlogLike = asynchandler(async (req, res) => {
   try {
