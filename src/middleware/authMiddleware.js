@@ -5,7 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ACCESS_TOKEN_SECRET } from "../constant.js";
 
 const verifyJWT = asynchandler(async (req, _, next) => {
-  try {
+  // try {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer", "");
@@ -29,9 +29,9 @@ const verifyJWT = asynchandler(async (req, _, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
-    throw new ApiError(401, error?.message || "Invalid access token");
-  }
+  // } catch (error) {
+  //   throw new ApiError(401, error?.message || "Invalid access token");
+  // }
 });
 
 export default verifyJWT;
