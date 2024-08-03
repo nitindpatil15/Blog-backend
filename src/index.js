@@ -13,7 +13,7 @@ connectDb()
         console.log("Server Error : ", error)
     })
     app.listen(PORT ||8043 , ()=>{
-        console.log(`Server is running at port http://localhost:${PORT}`)
+        console.log(`Server is running at port https://blog-backend-yjs8.onrender.com`)
     })
 })
 .catch((err) => {
