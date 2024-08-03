@@ -22,6 +22,6 @@ router
   .route("/:blogId")
   .get(getBlogById)
   .delete(deleteBlog)
-  .patch(verifyJWT,updateBlog);
+  .patch(updateBlog);
 
 export default router;
