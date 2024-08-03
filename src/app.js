@@ -1,12 +1,11 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { CORS_ORIGIN } from "./constant.js";
 
 const app = express();
 
 const corsOptions = {
-  origin: CORS_ORIGIN,
+  origin: "https://writestoryblog.netlify.app",
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   headers: ["Content-Type", 'Authorization', 'auth-token'],
   credentials: true,
