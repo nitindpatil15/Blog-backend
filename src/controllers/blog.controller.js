@@ -3,11 +3,13 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asynchandler } from "../utils/asynchandler.js";
 import { uploadOnCloudinary } from "../utils/claudinary.js";
+import User from "../models/User.model.js";
 
 const getAllBlogs = asynchandler(async (req, res) => {
   try {
     const { page = 1, limit = 10, query, sortBy, sortType, owner } = req.query;
-    //TODO: get all Blogs based on query, sort, pagination
+    
+    // Define sort and query criteria
     let sortCriteria = {};
     let blogQuery = {};
 
@@ -26,25 +28,36 @@ const getAllBlogs = asynchandler(async (req, res) => {
       sortCriteria[sortBy] = sortType === "desc" ? -1 : 1;
     }
 
+    // Fetch blogs with the defined criteria
     const blogs = await Blog.find(blogQuery)
       .sort(sortCriteria)
       .skip((page - 1) * limit)
-      .limit(limit);
+      .limit(limit)
+      .populate('owner', 'username avatar'); // Populate user data (username and avatar)
 
     if (!blogs) {
-      throw new ApiError(400, "error while fetching all Blogs");
+      throw new ApiError(400, "Error while fetching blogs");
     }
+
+    // Map blog data to include user details
+    const enrichedBlogs = blogs.map(blog => ({
+      ...blog._doc,
+      author: {
+        username: blog.owner.username,
+        avatar: blog.owner.avatar,
+      },
+    }));
 
     return res
       .status(200)
-      .json(new ApiResponse(200, { blogs, owner }, "Blogs fetched"));
+      .json(new ApiResponse(200, { blogs: enrichedBlogs }, "Blogs fetched"));
   } catch (error) {
     throw new ApiError(500, "Server Error...");
   }
 });
 
 const publishABlog = asynchandler(async (req, res) => {
-  // try {
+  try {
     const { title, content } = req.body;
 
     if ([title, content].some((field) => field?.trim() === "")) {
@@ -77,9 +90,9 @@ const publishABlog = asynchandler(async (req, res) => {
     return res
       .status(200)
       .json(new ApiResponse(200, createBlog, "Blog Uploaded Successfully"));
-  // } catch (error) {
-  //   throw new ApiError(500,"something goes wrong ! try again after sometime");
-  // }
+  } catch (error) {
+    throw new ApiError(500,"something goes wrong ! try again after sometime");
+  }
 });
 
 const getBlogById = asynchandler(async (req, res) => {

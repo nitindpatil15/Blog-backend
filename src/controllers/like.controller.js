@@ -48,39 +48,4 @@ const toggleBlogLike = asynchandler(async (req, res) => {
   }
 });
 
-// To Do like comment
-const toggleCommentLike = asynchandler(async (req, res) => {
-  const { commentId } = req.params;
-  if (!commentId) {
-    throw new ApiError(401, "Select valid comment!");
-  }
-
-  const { userId } = req.user?._id;
-  const condition = { likedBy: userId, comment: commentId };
-
-  const like = await Like.findOne(condition);
-  if (!like) {
-    const newlike = await Like.create({ likedBy: userId, comment: commentId });
-    await Comment.findByIdAndUpdate(commentId, { $inc: { likes: +1 } });
-    if (!newlike) {
-      throw new ApiError(401, "like not Created");
-    }
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, newlike, "Liked a Comment"));
-  } else {
-    const removelike = await Like.findOneAndDelete(condition);
-    await Comment.findByIdAndUpdate(commentId, { $inc: { likes: -1 } });
-
-    if (!removelike) {
-      throw new ApiError(401, "like not Removed");
-    }
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, removelike, "Unliked a Comment"));
-  }
-});
-
-export { toggleCommentLike, toggleBlogLike };
+export {toggleBlogLike };

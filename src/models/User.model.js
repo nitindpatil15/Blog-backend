@@ -74,7 +74,7 @@ UserSchema.methods.generateAccessToken = function() {
 
 
   // Sign the access token using a secret key
-  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '60m' }); // Adjust expiry as needed
+  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET); // Adjust expiry as needed
 
   return accessToken;
 };
