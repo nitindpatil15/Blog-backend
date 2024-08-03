@@ -20,8 +20,8 @@ router.route("/").get(getAllBlogs)
 router.route('/user/blogs').get(verifyJWT,getCurrentUserBlogs)
 router
   .route("/:blogId")
-  .get(verifyJWT,getBlogById)
-  .delete(verifyJWT,deleteBlog)
+  .get(getBlogById)
+  .delete(deleteBlog)
   .patch(verifyJWT,updateBlog);
 
 export default router;

@@ -4,8 +4,6 @@ import {getBlogComments,addComment} from '../controllers/comment.controller.js'
 
 const router = Router(verifyJWT);
 
-router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
-
-router.route("/:blogId").get(getBlogComments).post(addComment);
+router.route("/:blogId").get(getBlogComments).post(verifyJWT,addComment);
 
 export default router
