@@ -39,22 +39,24 @@ const getAllBlogs = asynchandler(async (req, res) => {
       throw new ApiError(400, "Error while fetching blogs");
     }
 
-    // Map blog data to include user details
+    // Map blog data to include user details, ensuring owner is not null
     const enrichedBlogs = blogs.map(blog => ({
       ...blog._doc,
-      author: {
+      author: blog.owner ? {
         username: blog.owner.username,
         avatar: blog.owner.avatar,
-      },
+      } : null, // Handle case where owner is null
     }));
 
     return res
       .status(200)
       .json(new ApiResponse(200, { blogs: enrichedBlogs }, "Blogs fetched"));
   } catch (error) {
+    console.log(error);
     throw new ApiError(500, "Server Error...");
   }
 });
+
 
 const publishABlog = asynchandler(async (req, res) => {
   try {
