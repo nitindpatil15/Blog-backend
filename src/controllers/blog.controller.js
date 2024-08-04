@@ -35,17 +35,23 @@ const getAllBlogs = asynchandler(async (req, res) => {
       .limit(limit)
       .populate('owner', 'username avatar'); // Populate user data (username and avatar)
 
+    if (!blogs) {
+      throw new ApiError(400, "Error while fetching blogs");
+    }
 
     // Map blog data to include user details
     const enrichedBlogs = blogs.map(blog => ({
       ...blog._doc,
+      author: {
+        username: blog.owner.username,
+        avatar: blog.owner.avatar,
+      },
     }));
 
     return res
       .status(200)
       .json(new ApiResponse(200, { blogs: enrichedBlogs }, "Blogs fetched"));
   } catch (error) {
-    console.error('Error:', error.message);
     throw new ApiError(500, "Server Error...");
   }
 });
