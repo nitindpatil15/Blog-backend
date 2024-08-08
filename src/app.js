@@ -5,7 +5,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: "https://writestoryblog.netlify.app",
+  origin: ["https://writestoryblog.netlify.app","http://localhost:3000"],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   headers: ["Content-Type", 'Authorization', 'auth-token'],
   credentials: true,
